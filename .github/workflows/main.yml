@@ -1,0 +1,36 @@
+name: Download
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  Download:
+    name: Download
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dependencies
+        run: |
+          sudo apt update
+          sudo apt -y upgrade
+          sudo apt -y install wget tar
+      - name: Download Artix Lxqt
+        run: |
+          cd $HOME
+          mkdir Project
+          cd /home/runner/Project
+          wget "https://iso.artixlinux.org/iso/artix-lxqt-openrc-20210726-x86_64.iso"
+      - name: Check Compressed File Checksum
+        run: |
+          cd /home/runner/Project
+          echo SHA-256
+          sha256sum artix-lxqt-openrc-20210726-x86_64.iso
+          echo "-------------------------------------------------------------------------------"
+          echo MD5
+          md5sum artix-lxqt-openrc-20210726-x86_64.iso
+      - name: Upload ChromeOS Image
+        uses: actions/upload-artifact@v2
+        with:
+          name: ChromeOS-Image.tar.xz
+          path: '/home/runner/Project/artix-lxqt-openrc-20210726-x86_64.iso'
