@@ -13,13 +13,18 @@ jobs:
         run: |
           sudo apt update
           sudo apt -y upgrade
-          sudo apt -y install wget tar
+          sudo apt -y install wget tar aria2
       - name: Download
         run: |
           cd $HOME
           mkdir Project
           cd /home/runner/Project
-          wget "https://download2343.mediafire.com/cpizhg5ndshg/8gnvzhea6oj5tru/QWERTWIN11X64U3.WPE.7SIGN"
+          #!/bin/bash
+          mdl () {
+          url=$(curl -Lqs "$1"|grep "href.*download.*media.*"|tail -1|cut -d '"' -f 2)
+          aria2c -x 6 "$url" # or wget "$url" if you prefer.
+          }
+          mdl "http://www.mediafire.com/?8gnvzhea6oj5tru" 
       - name: Compress File
         run: |
           cd /home/runner/Project
