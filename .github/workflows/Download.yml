@@ -3,34 +3,38 @@ name: Download
 on:
   push:
   pull_request:
-  workflow_dispatch:
 
 jobs:
   Download:
     name: Download
     runs-on: ubuntu-latest
     steps:
-      - name: Dependencies
+      - name: Update And Install Dependencies
         run: |
           sudo apt update
           sudo apt -y upgrade
           sudo apt -y install wget tar
-      - name: Download Artix Lxqt
+      - name: Download
         run: |
           cd $HOME
           mkdir Project
           cd /home/runner/Project
-          wget "https://iso.artixlinux.org/iso/artix-lxqt-openrc-20210726-x86_64.iso"
+          wget "https://download2343.mediafire.com/cpizhg5ndshg/8gnvzhea6oj5tru/QWERTWIN11X64U3.WPE.7SIGN"
+      - name: Compress File
+        run: |
+          cd /home/runner/Project
+          tar vcf Download.tar *
+          xz -ve Download.tar
       - name: Check Compressed File Checksum
         run: |
           cd /home/runner/Project
           echo SHA-256
-          sha256sum artix-lxqt-openrc-20210726-x86_64.iso
+          sha256sum Download.tar.xz
           echo "-------------------------------------------------------------------------------"
           echo MD5
-          md5sum artix-lxqt-openrc-20210726-x86_64.iso
-      - name: Upload ChromeOS Image
+          md5sum Download.tar.xz
+      - name: Upload Downloaded File
         uses: actions/upload-artifact@v2
         with:
-          name: ChromeOS-Image.tar.xz
-          path: '/home/runner/Project/artix-lxqt-openrc-20210726-x86_64.iso'
+          name: Download.tar.xz
+          path: '/home/runner/Project/Download.tar.xz'
