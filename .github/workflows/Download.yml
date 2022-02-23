@@ -25,7 +25,7 @@ jobs:
           url=$(curl -Lqs "$1"|grep "href.*download.*media.*"|tail -1|cut -d '"' -f 2)
           aria2c -x 6 "$url" # or wget "$url" if you prefer.
           }
-          mdl "http://www.mediafire.com/?8gnvzhea6oj5tru" 
+          curl -C - -OL https://download.bell-sw.com/java/8u322+6/bellsoft-jre8u322+6-linux-amd64-full.tar.gz
       - name: Compress File
         run: |
           cd /home/runner/Project
