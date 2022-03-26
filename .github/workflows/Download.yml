@@ -18,14 +18,14 @@ jobs:
       - name: Download
         run: |
           cd $HOME
-          mkdir Project
-          cd /home/runner/Project
+          mkdir $HOME/Project
+          cd $HOME/Project
           #!/bin/bash
           mdl () {
           url=$(curl -Lqs "$1"|grep "href.*download.*media.*"|tail -1|cut -d '"' -f 2)
           aria2c -x 6 "$url" # or wget "$url" if you prefer.
           }
-          curl -C - -OL https://download.bell-sw.com/java/8u322+6/bellsoft-jre8u322+6-linux-amd64-full.tar.gz
+          curl -C - -OL https://ftp.riken.jp/Linux/fedora/releases/35/Workstation/x86_64/iso/Fedora-Workstation-Live-x86_64-35-1.2.iso
       - name: Compress File
         run: |
           cd /home/runner/Project
