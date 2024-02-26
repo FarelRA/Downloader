@@ -14,33 +14,19 @@ jobs:
         run: |
           sudo apt update
           sudo apt -y upgrade
-          sudo apt -y install wget tar aria2
+          sudo apt -y install aria2
       - name: Download
         run: |
-          cd $HOME
-          mkdir $HOME/Project
-          cd $HOME/Project
-          #!/bin/bash
-          mdl () {
-          url=$(curl -Lqs "$1"|grep "href.*download.*media.*"|tail -1|cut -d '"' -f 2)
-          aria2c -x 6 "$url" # or wget "$url" if you prefer.
-          }
-          curl -C - -OL https://ftp.riken.jp/Linux/fedora/releases/35/Workstation/x86_64/iso/Fedora-Workstation-Live-x86_64-35-1.2.iso
-      - name: Compress File
-        run: |
-          cd /home/runner/Project
-          tar vcf Download.tar *
-          xz -ve Download.tar
+          aria2c -x16 -s1024 -o download.zip http://web.archive.org/web/20200425084614if_/https://dlcdnets.asus.com/pub/ASUS/ZenFone/ZA550KL/UL-ASUS_X00R-WW-AOSP-17.07.2003.405-user.zip
       - name: Check Compressed File Checksum
         run: |
-          cd /home/runner/Project
           echo SHA-256
-          sha256sum Download.tar.xz
+          sha256sum download.zip
           echo "-------------------------------------------------------------------------------"
           echo MD5
-          md5sum Download.tar.xz
+          md5sum download.zip
       - name: Upload Downloaded File
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: Download.tar.xz
-          path: '/home/runner/Project/Download.tar.xz'
+          name: download.zip
+          path: download.zip
